@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 
     # Path to your ChromeDriver
-chrome_driver_path = r'C:\Users\DELL\Downloads\chromedriver-win64\chromedriver.exe'
+chrome_driver_path = r'C:\Users\MSI\Downloads\chromedriver-win64\chromedriver-win64\chromedriver.exe'
 
     # Replace these credentials with your own
 email = "bhattaraianil507"
@@ -154,59 +154,31 @@ try:
  # Click the link
         button = driver.find_element(By.XPATH, "//button[contains(text(), 'Make a Reservation')]")
         button.click()
-        time.sleep(10)
-
-        region_dropdown = Select(driver.find_element(By.ID, "visitRegnCd"))  # Replace with actual ID or locator
-        region_dropdown.select_by_value('EE')   # Select by value
         time.sleep(5)
-           
-        # region_dropdown = driver.find_element(By.ID, "visitRegnCd")
-        # driver.execute_script("arguments[0].value = 'BB';", region_dropdown)
-        # driver.execute_script("arguments[0].dispatchEvent(new Event('change'));", region_dropdown)
+        wait = WebDriverWait(driver, 10) 
 
-# Wait for the nation dropdown to be clickable and select a nation
-        driver.execute_script("arguments[0].style.display = 'block'; arguments[0].disabled = false;", driver.find_element(By.ID, "visitNatnCd"))
-        WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.ID, "visitNatnCd"))  # Replace with the actual ID
-    )
-
-    # Step 3: Select a Country from the Updated Dropdown
+        # Select "Europe" in the region dropdown
+        region_dropdown = wait.until(EC.element_to_be_clickable((By.ID, "visitRegnCd")))
+        Select(region_dropdown).select_by_value("EE")  # "EE" corresponds to Europe
+        time.sleep(2)  # Allow for UI updates
         
-        country_dropdown = Select(driver.find_element(By.ID, "visitNatnCd"))
-        country_dropdown.select_by_value("321")  # Example: Selecting 'INDIA'
+        #  Wait for the nation dropdown to update
+        nation_dropdown = wait.until(EC.element_to_be_clickable((By.ID, "visitNatnCdView")))
+        Select(nation_dropdown).select_by_value("321")  # "321" corresponds to France
+        time.sleep(2)  # Allow time for UI processing
+        
+        #  Wait for the consulate dropdown to update and select the correct option
+        consulate_dropdown = wait.until(EC.element_to_be_clickable((By.ID, "visitEmblCdView")))
+        Select(consulate_dropdown).select_by_value(
+            "FR"
+        )
         time.sleep(5)
-#         nation_dropdown = driver.find_element(By.ID, "visitNatnCd")
-
-# # Set the value to "124" (INDIA)
-#         driver.execute_script("arguments[0].value = '124';", nation_dropdown)
-#         driver.execute_script("arguments[0].dispatchEvent(new Event('change'));", nation_dropdown)
-
-# Wait for the consulate/embassy dropdown to be clickable and select a consulate/embassy
-        driver.execute_script("arguments[0].style.display = 'block'; arguments[0].disabled = false;", driver.find_element(By.ID, "visitEmblCd"))
-        consulate_dropdown = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.ID, "visitEmblCd"))
-        
-)       
-        consulate_dropdown = Select(driver.find_element(By.ID, "visitEmblCd"))
-        consulate_dropdown.select_by_visible_text(
-        "[FRANCE] Embassy of the Republic of Korea to the French Republic"
- )  # Example: Selecting 'INDIA'
-        time.sleep(10)
-#         Select(consulate_dropdown).select_by_visible_text(
-#         "[INDIA] Embassy of the Republic of Korea to the Republic of India"
-# )
-
-# # Submit the form
-#         form = WebDriverWait(driver, 10).until(
-#         EC.presence_of_element_located((By.ID, "emblForm"))
-# )
-#         form.submit()
-#         print("Form submitted successfully!")
-
-# Wait for the next button to be clickable and click it
+        driver.switch_to.alert.accept()
+        # Allow user to see the final selection
+        # Wait for the next button to be clickable and click it
         next_button = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.ID, "aftBtn"))
-)
+        )
         next_button.click()
         print("Successful!")
 # # Use execute_script to simulate a click
@@ -240,3 +212,16 @@ except Exception as e:
 finally:
         # Close the browser
         driver.quit()
+
+    # Click the button
+        # reservation_button.click()
+
+        # print("Button clicked successfully!")
+        # time.sleep(5)
+
+        # Locate the dropdown element by its ID (or other locator)
+        # dropdown = Select(driver.find_element(By.ID, "dropdown_id"))  # Replace "dropdown_id" with the actual ID of the dropdown
+
+        # Select an option by its visible text (name)
+        # dropdown.select_by_visible_text("Nepal")  # Replace "Option Name" with the actual text of the option you want to select
+        
